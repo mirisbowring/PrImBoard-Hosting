@@ -6,10 +6,6 @@ services:
         build:
             dockerfile: Dockerfile.keycloak
             context: .
-        volumes:
-            - type: bind
-              source: ./realm.json
-              target: /tmp/primbaord-realm.json
         environment: 
             DB_VENDOR: POSTGRES
             DB_ADDR: keycloak-db
@@ -21,14 +17,18 @@ services:
             KEYCLOAK_USER: "${KEYCLOAK_USER}"
             KEYCLOAK_PASSWORD: "${KEYCLOAK_PASSWORD}"
             KEYCLOAK_IMPORT: /tmp/primboard-realm.json
+        volumes:
+            - type: bind
+              source: ./realm.json
+              target: /tmp/primboard-realm.json
     keycloak-db:
         image: postgres:13-alpine
-        volumes:
-            - primboard-keycloak-database-vol:/var/lib/postgresql/data
         environment:
             POSTGRES_DB: "${KEYCLOAK_POSTGRES_DB}"
             POSTGRES_USER: "${KEYCLOAK_POSTGRES_USER}"
             POSTGRES_PASSWORD: "${KEYCLOAK_POSTGRES_PASSWORD}"
+        volumes:
+            - primboard-keycloak-database-vol:/var/lib/postgresql/data
     nginx:
         image: nginx:1.19-alpine
         depends_on: 
