@@ -76,7 +76,7 @@ services:
             - primboard-node-vol:/data:rw
     primboard-database:
         image: mongo:4.4-bionic
-        restart: unless-stoppped
+        restart: unless-stopped
         environment: 
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: example
