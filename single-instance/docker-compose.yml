@@ -7,7 +7,9 @@ services:
             dockerfile: Dockerfile.keycloak
             context: .
         volumes:
-            - ./realm.json:/tmp/primbaord-realm.json
+            - type: bind
+              source: ./realm.json
+              target: /tmp/primbaord-realm.json
         environment: 
             DB_VENDOR: POSTGRES
             DB_ADDR: keycloak-db
@@ -30,7 +32,9 @@ services:
     nginx:
         image: nginx:1.19-alpine
         volumes:
-            - ./nginx.conf:/etc/nginx/nginx.conf
+            - type: bind
+              source: ./nginx.conf
+              target: /etc/nginx/nginx.conf
             - primboard-nginx-vol:/etc/nginx/logs:rw
         environment: 
             - PROXY_ADDRESS_FORWARDING=true
@@ -82,8 +86,10 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: example
             MONGO_INITDB_DATABASE: admin
         volumes:
+            - type: bind
+              source: ./init.js
+              target: /docker-entrypoint-initdb.d/init.js
             - primboard-database-vol:/data/db
-            - ./init.js:/docker-entrypoint-initdb.d/init.js:ro
     web:
         depends_on: 
             - keycloak
