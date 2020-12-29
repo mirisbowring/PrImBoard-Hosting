@@ -31,6 +31,8 @@ services:
             POSTGRES_PASSWORD: "${KEYCLOAK_POSTGRES_PASSWORD}"
     nginx:
         image: nginx:1.19-alpine
+        depends_on: 
+            - gateway
         volumes:
             - type: bind
               source: ./nginx.conf
