@@ -33,6 +33,8 @@ services:
         image: nginx:1.19-alpine
         depends_on: 
             - gateway
+            - keycloak
+            - node
         volumes:
             - type: bind
               source: ./nginx.conf
