@@ -49,6 +49,8 @@ services:
             - keycloak
         image: mirisbowring/primboard-gateway:latest
         environment:
+            - CERTIFICATES=/certs
+            - CA_CERT=/certs/ca-cert.pem
             - PORT=8765
             - MONGO_URL=mongodb://primboardapi:Start123@primboard-database:27017/primboard
             - DATABASE_NAME=primboard
@@ -63,12 +65,15 @@ services:
             - SESSION_ROTATION=false
             - DEFAULT_MEDIA_PAGE_SIZE=30
             - INVITE_VALIDITY=3
+        volumes:
+            - ${CA_PATH}:/certs/ca-cert.pem:ro
     node:
         depends_on:
             - gateway
         image: mirisbowring/primboard-node:latest
         environment:
             - BASEPATH=/data
+            - CA_CERT=/certs/ca-cert.pem
             - TARGETPATH=/share
             - HTTP=true
             - GATEWAY_URL=https://${HOST}/gateway
@@ -82,6 +87,7 @@ services:
             - NODE_AUTH_SECRET=sdfnsdfjhsduifhsdiufhsdiuofhjsdi
         volumes:
             - primboard-node-vol:/data:rw
+            - ${CA_PATH}:/certs/ca-cert.pem:ro
     primboard-database:
         image: mongo:4.4-bionic
         restart: unless-stopped
