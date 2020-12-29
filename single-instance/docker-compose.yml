@@ -94,7 +94,7 @@ services:
             KEYCLOAK_REALM: ${KEYCLOAK_REALM}
             KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID_WEB}
         volumes:
-            primboard-web-vol:/etc/nginx/logs
+            - primboard-web-vol:/etc/nginx/logs
 volumes:
     primboard-database-vol:
     primboard-nginx-vol:
