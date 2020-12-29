@@ -35,8 +35,7 @@ services:
         environment: 
             - PROXY_ADDRESS_FORWARDING=true
         ports:
-            - 80:80
-            - 443:443
+            - ${REVERSE_PROXY_PUBLIC_PORT}:80
     gateway:
         depends_on: 
             - keycloak
@@ -48,7 +47,7 @@ services:
             - HTTP=true
             - TLS_INSECURE=false
             - KEYCLOAK_URL=${HOST}/keycloak
-            - KEYCLOAK_REALM="${KEYCLOAK_REALM}"
+            - KEYCLOAK_REALM=${KEYCLOAK_REALM}
             - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID_GATEWAY}
             - KEYCLOAK_SECRET=${KEYCLOAK_CLIENT_SECRET_GATEWAY}
             - ALLOWED_ORIGINS=${HOST}
@@ -94,10 +93,11 @@ services:
             KEYCLOAK_ISSUER: ${HOST}/keycloak/auth
             KEYCLOAK_REALM: ${KEYCLOAK_REALM}
             KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID_WEB}
+        volumes:
+            primboard-web-vol:/etc/nginx/logs
 volumes:
     primboard-database-vol:
     primboard-nginx-vol:
     primboard-node-vol:
     primboard-keycloak-database-vol:
-    
-            
+    primboard-web-vol:
